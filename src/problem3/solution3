@@ -1,0 +1,135 @@
+interface WalletBalance {
+  currency: string;
+  amount: number;
+  blockchain: string; //added blockchain type
+}
+
+interface FormattedWalletBalance {
+  currency: string;
+  amount: number;
+  formatted: string;
+}
+
+//Implemented Datasource to be able to fetch prices
+class Datasource {
+  url: string;
+
+  constructor(url: string) {
+    this.url = url;
+  }
+
+  async getPrices(): Promise<Record<string, number>> {
+    try {
+      const response = await fetch(this.url); //used fetch to get data
+      if (!response.ok) {
+        throw new Error('Failed to fetch prices');
+      }
+      return response.json();
+    } catch (error) {
+      console.error('Error fetching prices:', error); //added error handling with corrected error logging
+      return {};
+    }
+  }
+}
+
+interface Props extends BoxProps {
+  
+}
+
+const WalletPage: React.FC<Props> = (props: Props) => {
+  const { children, ...rest } = props;
+  const balances = useWalletBalances();
+  const [prices, setPrices] = useState<Record<string, number>>({}); //defined initial state along with their types
+
+  useEffect(() => {
+    const datasource = new Datasource('https://interview.switcheo.com/prices.json');
+    datasource.getPrices().then((prices) => {
+        setPrices(prices);
+      }).catch((error) => {
+        console.error(error); //corrected error logging
+      });
+  }, []); 
+
+  const getPriority = (blockchain: string): number => { //Changed from 'any' type to 'string' type
+    switch (blockchain) {
+      case 'Osmosis':
+        return 100;
+      case 'Ethereum':
+        return 50;
+      case 'Arbitrum':
+        return 30;
+      case 'Zilliqa':
+        return 20;
+      case 'Neo':
+        return 20;
+      default:
+        return -99;
+    }
+  };
+
+  const sortedBalances = useMemo(() => {
+    return balances.filter((balance: WalletBalance) => {
+        const balancePriority = getPriority(balance.blockchain); //corrected variable name 
+        if (balancePriority > -99 && balance.amount > 0) { //instead of having 2 separate if blocks, we simplify both into one by using the && operator
+          return true;
+        }
+        return false;
+      }).sort((lhs: WalletBalance, rhs: WalletBalance) => {
+        const leftPriority = getPriority(lhs.blockchain);
+        const rightPriority = getPriority(rhs.blockchain);
+        return rightPriority - leftPriority; //simplified logic
+      });
+  }, [balances]); //removed 'prices' as it is not needed for sorting
+
+  // Check for missing prices and balances
+  if (!prices || !sortedBalances) {
+    console.warn('Missing prices or balances'); // Log if missing
+    return null; 
+  }
+
+  const rows = sortedBalances.map((balance: WalletBalance) => {
+    const usdValue = prices[balance.currency] * balance.amount;
+    const formattedAmount = balance.amount.toFixed(); 
+    return (
+      <WalletRow
+        className={classes.row}
+        key={balance.currency} // Changed 'key' in 'WalletRow' from 'index' to 'balance.currency' for a more unique identification
+        amount={balance.amount}
+        usdValue={usdValue}
+        formattedAmount={formattedAmount}
+      />
+    );
+  });
+
+  return <div {...rest}>{rows}</div>;
+};
+
+
+
+
+// Issue 1: Incorrect logging function console.err.
+// Improvement: Change console.err to console.error.
+
+
+// Issue 2: In sortedBalances, the logic for filtering is incorrect. It checks lhsPriority > -99, which is not defined. This should be balancePriority.
+// Improvement: Ensured the filtering logic uses the correct variable 'balancePriority'
+
+
+// Issue 3: The initial state of prices is set as an empty object, which can cause errors if undefined is encountered.
+// Improvement: Defined prices state with a type.
+
+
+// Issue 4: The formattedBalances array is derived but never used in rendering.
+// Improvement: Removed the formattedBalances array since it is not needed in sorting
+
+
+// Issue 5: Using index as a key in lists can lead to inefficient rendering if the list changes.
+// Improvement: Changed key in WalletRow from index to balance.currency for unique identification.
+
+
+// Issue 6: The computation in sortedBalances uses both filtering and sorting, which could be optimized.
+// Improvement: Simplified sorting and filtering logic to reduce computational complexity.
+
+
+// Issue 7: Using 'any' for blockchain defeats the purpose of TypeScript.
+// Improvement: Defined an appropriate type or enum for blockchain like 'string'.

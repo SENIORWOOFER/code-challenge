@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fancy Form</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script src="https://kit.fontawesome.com/cfd2fbe593.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div id="header">
+    <div class="container">
+      <nav class="navbar">
+        <h1><span>NFT</span>Swap</h1>
+        <div class="nav-right">
+            <input type="text" class="search-bar" placeholder="Search...">
+            <button class="connect-wallet" id="connectWalletButton">Connect Wallet</button>
+        </div>
+      </nav>
+      <div class="header-text">
+        <p>Your go-to platform for swapping digital assets seamlessly.</p>
+        <h1>Welcome to your<br><span>NFT Swapper</span></h1>
+        <button class="get-started" id="getStarted">Get Started</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="instructions">
+    <div class="container">
+      <h1>Before we <span>begin</span>,</h1>
+      <p>Follow these simple steps to swap your <span>NFTs</span> seamlessly:</p>
+      <ol>
+        <li>Connect your wallet by clicking the "Connect Wallet" button.</li>
+        <li>Enter the amount of the NFT you want to sell.</li>
+        <li>Select the type of the NFT you want to sell.</li>
+        <li>Select the currency you want to receive in exchange.</li>
+        <li>Click the "Swap" button to complete the transaction.</li>
+      </ol>
+      <button class="get-started" id="StartSwapping">Let's Start Swapping</button>
+    </div>
+  </div>
+
+  <div id="swapper">
+    <div class="container">
+      <div class="swap-interface">
+        <div class="swap-card">
+          <div class="swap-input">
+            <label>Sell</label>
+            <div class="input-container">
+              <input type="number" placeholder="0" class="input-amount" id="sellAmount">
+              <select class="input-select" id="sellCurrency">
+                <option value="" disabled selected>Select Currency</option>
+              </select>
+            </div>
+            <p class="input-value" id="sellValue">$0.00</p>
+          </div>
+          <div class="swap-icon">
+            <button class="swap-button-icon" id="swapButton"><i class="fas fa-exchange-alt"></i></button>
+          </div>
+          <div class="swap-input">
+            <label>Buy</label>
+            <div class="input-container">
+              <input type="number" placeholder="0" class="input-amount" id="buyAmount" readonly>
+              <select class="input-select" id="buyCurrency">
+                <option value="" disabled selected>Select Currency</option>
+              </select>
+            </div>
+            <p class="input-value" id="buyValue">$0.00</p>
+          </div>
+        </div>
+        <button class="connect-wallet">Swap</button>
+        <div class="swap-info">
+          <p id="conversionRate">Please enter the relevant fields to begin.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="walletOverlay" class="overlay">
+    <div class="overlay-content">
+      <span class="close-button" id="closeOverlay">&times;</span>
+      <h2>Connect a Wallet</h2>
+      <div class="wallet-options">
+        <div class="wallet-option">
+          <button class="wallet-button" style="background-color: #ff004f;">Get NFTSwap Wallet</button>
+          <p>Available on iOS, Android, and Chrome</p>
+        </div>
+        <div class="divider">
+          <span>Other Wallets</span>
+        </div>
+        <div class="wallet-option">
+          <button class="wallet-button" style="background-color: #ff004f;">WalletConnect</button>
+          <p>Connect via WalletConnect</p>
+        </div>
+        <div class="wallet-option">
+          <button class="wallet-button" style="background-color: #ff004f;">Coinbase Wallet</button>
+          <p>Connect via Coinbase Wallet</p>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <p>By connecting a wallet, you agree to our Terms of Service and consent to our Privacy Policy.</p>
+    </div>
+  </div>
+
+  <div class="socials">
+    <div class="container">
+      <h2>Contact Us</h2>
+      <div class="contact-info">
+        <p><strong>Our Address:</strong><br><br>
+        Suntec City, 3 Temasek Boulevard, West Wing,<br> #02-328/329 Singapore 038983</p>
+        <p><strong>Our Email:</strong><br><br>
+        abcd@email.com</p>
+      </div>
+      <div class="social-icons">
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="mailto:abcd@email.com"><i class="fas fa-envelope"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+
+
+</body>
+</html>
